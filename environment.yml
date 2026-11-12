@@ -1,0 +1,11 @@
+name: ai_art
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      - tensorflow==2.15.0     # loads the Keras .h5 models exported by Teachable Machine
+      - numpy==1.26.4          # TensorFlow 2.15 requires NumPy < 2
+      - opencv-python==4.9.0.80
+      - matplotlib==3.8.4

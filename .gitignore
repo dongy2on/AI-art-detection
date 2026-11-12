@@ -1,0 +1,15 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Optional output of evaluate.py --save-images (large, can be regenerated)
+results/images/
+
+# Archives (data/ is already included unpacked)
+*.zip
+
+# Editor / OS files
+.vscode/
+.ipynb_checkpoints/
+Thumbs.db
+desktop.ini
