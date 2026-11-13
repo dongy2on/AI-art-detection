@@ -2,7 +2,7 @@
 
 Can a small image classifier tell a human painting from an AI-generated one, and what happens to it when the training data is not clean?
 
-This is my project for EF2039 AI Programming (PA04). I trained a human vs. AI artwork classifier with Teachable Machine and looked at two data problems:
+Project for EF2039 AI Programming (PA04). A human vs. AI artwork classifier is trained with Teachable Machine under two kinds of data problems:
 
 1. **Class imbalance**: what if there are far fewer human paintings than AI images in the training set?
 2. **Label noise**: what if some training images have the wrong label?
@@ -36,7 +36,7 @@ AI-art-detection/
 │   ├── evaluate.py       tests all 18 models -> results/*.csv
 │   └── make_figures.py   draws the two figures above
 ├── data/
-│   ├── train/M0 ~ M5/    images I uploaded to Teachable Machine (human/, ai/)
+│   ├── train/M0 ~ M5/    images uploaded to Teachable Machine (human/, ai/)
 │   ├── test/             1,000 test images, never used for training
 │   ├── manifest_train.csv
 │   └── manifest_test.csv
@@ -46,7 +46,9 @@ AI-art-detection/
 
 ## How to run
 
-You only need conda. Everything runs on CPU (I ran it on Windows and Linux and got the same numbers).
+Only conda is needed. Everything runs on CPU (tested on Windows and Linux with the same numbers).
+
+Hardware requirements: no GPU, 8 GB RAM recommended (`evaluate.py` peaks at about 4 GB), about 2 GB of disk space (1.5 GB for the conda environment, 120 MB for this repository). Evaluating all 18 models takes under 3 minutes on a 2-core CPU.
 
 ```bash
 git clone https://github.com/dongy2on/AI-art-detection.git
@@ -63,21 +65,21 @@ python scripts/make_figures.py  # saves the two figures to results/
 
 ## Data
 
-I used [AI-ArtBench](https://www.kaggle.com/datasets/ravidussilva/real-ai-art) from Kaggle (MIT License). Its human paintings come from ArtBench-10, so check ArtBench-10's terms too if you reuse the images.
+Dataset: [AI-ArtBench](https://www.kaggle.com/datasets/ravidussilva/real-ai-art) from Kaggle (MIT License). Its human paintings come from ArtBench-10, so check ArtBench-10's terms too if you reuse the images.
 
 - **human**: human paintings, 256×256
 - **ai**: images made with Latent Diffusion, 256×256
 
-The dataset also has Stable Diffusion images, but they are 768×768. I left them out because otherwise the model could just learn "bigger image = AI".
+The dataset also has Stable Diffusion images, but they are 768×768. They are left out, otherwise the model could just learn "bigger image = AI".
 
-I sampled from all 10 styles equally (art nouveau, baroque, expressionism, impressionism, post-impressionism, realism, renaissance, romanticism, surrealism, ukiyo-e) with a fixed seed (2039):
+Images are sampled equally from all 10 styles (art nouveau, baroque, expressionism, impressionism, post-impressionism, realism, renaissance, romanticism, surrealism, ukiyo-e) with a fixed seed (2039):
 
 - train: 20 images per style per class from the official **train** split -> 200 human + 200 AI
 - test: 50 images per style per class from the official **test** split -> 500 human + 500 AI
 
 Since train and test come from different official splits, no test image was seen during training.
 
-The 6 training sets only differ in the thing I was testing. The smaller sets are subsets of the bigger ones, and the images flipped in M3 are also flipped in M4 and M5.
+The 6 training sets only differ in the factor being tested. The smaller sets are subsets of the bigger ones, and the images flipped in M3 are also flipped in M4 and M5.
 
 | Model | human/ folder | ai/ folder |
 |---|---|---|
@@ -109,7 +111,7 @@ If you retrain, upload `data/train/<model>/human` and `data/train/<model>/ai` wi
 
 ## Evaluation
 
-`evaluate.py` is based on the course example `03_evaluate_ai_model.py`. I changed a few things:
+`evaluate.py` is based on the course example `03_evaluate_ai_model.py`, with a few changes:
 
 - it loops over all 18 models instead of one hard-coded path
 - it converts images from BGR (OpenCV) to RGB, because Teachable Machine trains on RGB
